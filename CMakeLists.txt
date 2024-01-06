@@ -2,7 +2,7 @@
 
 project ("Snake_Game")
 
-add_executable(Snake_Game "src/main.cpp" "src/Game.h" "src/Game.cpp" "src/assist.h" "src/assist.cpp" )
+add_executable(Snake_Game "src/main.cpp" "src/headers/Game.h" "src/Game.cpp" "src/headers/assist.h" "src/assist.cpp"  "src/headers/Texture.h" "src/Texture.cpp")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_IMAGE REQUIRED)
