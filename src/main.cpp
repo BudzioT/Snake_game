@@ -44,7 +44,10 @@ int main(int argc, char* args[])
 				quit = true;
 		}
 
+		/* Render background */
 		backgroundTexture.render(0, 0);
+
+
 		SDL_RenderPresent(renderer);
 	}
 
