@@ -1,3 +1,4 @@
+#pragma once
 #include "SDL.h"
 #include "Texture.h"
 
@@ -14,7 +15,7 @@ extern SDL_Renderer* renderer;
 bool initialize();
 
 /* Loads all needed media */
-bool loadMedia(Texture& background);
+bool loadMedia(Texture& background, Texture& snakeTexture);
 
 /* Clean up before closing */
 void close();
