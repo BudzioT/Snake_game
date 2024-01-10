@@ -8,8 +8,8 @@ int SnakeSegment::m_height = 0;
 Texture* SnakeSegment::m_texture = nullptr;
 
 
-SnakeSegment::SnakeSegment(int posX = 0, int posY = 0, Texture* texture) : m_posX(posX), m_posY(posY),
-m_head(false), m_tail(false)
+SnakeSegment::SnakeSegment(int posX, int posY, double angle) : m_posX(posX), m_posY(posY),
+m_head(false), m_tail(false), m_angle(angle)
 {
 }
 
@@ -17,8 +17,68 @@ SnakeSegment::~SnakeSegment()
 {
 }
 
-void SnakeSegment::render(SDL_Rect* clip, double angle)
+void SnakeSegment::render(SDL_Rect* clip)
 {
-	m_texture->render(m_posX, m_posY, clip, angle);
+	if (m_texture)
+		m_texture->render(m_posX, m_posY, clip, m_angle);
 }
 
+int SnakeSegment::getPosX() const
+{
+	return m_posX;
+}
+
+int SnakeSegment::getPosY() const
+{
+	return m_posY;
+}
+
+int& SnakeSegment::posX()
+{
+	return m_posX;
+}
+
+int& SnakeSegment::posY()
+{
+	return m_posY;
+}
+
+void SnakeSegment::setWidth(int width)
+{
+	m_width = width;
+}
+
+void SnakeSegment::setHeight(int height)
+{
+	m_height = height;
+}
+
+void SnakeSegment::setHead(bool flag)
+{
+	m_head = flag;
+}
+
+void SnakeSegment::setTail(bool flag)
+{
+	m_tail = flag;
+}
+
+void SnakeSegment::setAngle(double angle)
+{
+	m_angle = angle;
+}
+
+bool SnakeSegment::isThisHead() const
+{
+	return m_head;
+}
+
+bool SnakeSegment::isThisTail() const
+{
+	return m_tail;
+}
+
+void SnakeSegment::setTexture(Texture* texture)
+{
+	m_texture = texture;
+}

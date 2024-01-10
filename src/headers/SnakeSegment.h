@@ -3,11 +3,11 @@
 class SnakeSegment
 {
 public:
-	SnakeSegment(int posX = 0, int posY = 0, Texture* texture);
+	SnakeSegment(int posX = 0, int posY = 0, double angle = 0.0);
 	~SnakeSegment();
 
 	/* Render segment */
-	void render(SDL_Rect* clip, double angle);
+	void render(SDL_Rect* clip);
 
 	/* Get X position value */
 	int getPosX() const;
@@ -28,10 +28,16 @@ public:
 	/* Set this segment as tail */
 	void setTail(bool flag);
 
+	/* Set angle */
+	void setAngle(double angle);
+
 	/* Is this segment a head */
 	bool isThisHead() const;
 	/* Is this segment a tail */
 	bool isThisTail() const;
+
+	/* Set texture */
+	void setTexture(Texture* texture);
 
 private:
 	/* Universal width */
@@ -43,6 +49,9 @@ private:
 	int m_posX;
 	/* Position on the Y axis */
 	int m_posY;
+
+	/* Angle in which segment is turned */
+	double m_angle;
 
 	/* Segment head flag */
 	bool m_head;
