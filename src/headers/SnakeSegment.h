@@ -19,10 +19,18 @@ public:
 	/* Get reference to Y position */
 	int& posY();
 
+	/* Get angle value */
+	double getAngle() const;
+
 	/* Set width */
 	void setWidth(int width);
 	/* Set height */
 	void setHeight(int height);
+
+	/* Get width */
+	int getWidth() const;
+	/* Get height */
+	int getHeight() const;
 
 	/* Set this segment as head */
 	void setHead(bool flag);
@@ -31,6 +39,8 @@ public:
 
 	/* Set angle */
 	void setAngle(double angle);
+	/* Set position */
+	void setPosition(int posX, int posY);
 
 	/* Is this segment a head */
 	bool isThisHead() const;
