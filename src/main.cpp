@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 
 #include "headers/assist.h"
+#include "headers/Snake.h"
+
 
 
 /* Windowe dimensions */
@@ -25,15 +27,20 @@ int main(int argc, char* args[])
 
 	/* Textures */
 	Texture backgroundTexture;
+	Texture snakeTexture;
 
 
 	/* Load media */
-	loadMedia(backgroundTexture);
+	loadMedia(backgroundTexture, snakeTexture);
 	
 	/* Close flag */
 	bool quit = false;
 	/* Event variable */
 	SDL_Event event;
+
+	/* Create the snake */
+	Snake snake(&snakeTexture, { 0, 0, 32, 32 }, { 32, 0, 32, 32 }, { 64, 0, 32, 32 }, 
+		32, 32, 352, 256, 180.0);
 
 	/* Game loop */
 	while (!quit) {
@@ -47,6 +54,8 @@ int main(int argc, char* args[])
 		/* Render background */
 		backgroundTexture.render(0, 0);
 
+		/* Render snake */
+		snake.render();
 
 		SDL_RenderPresent(renderer);
 	}

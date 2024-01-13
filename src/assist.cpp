@@ -39,7 +39,7 @@ bool initialize()
 	return true;
 }
 
-bool loadMedia(Texture& background)
+bool loadMedia(Texture& background, Texture& snakeTexture)
 {
 	/* Success flag */
 	bool success = true;
@@ -47,6 +47,13 @@ bool loadMedia(Texture& background)
 	/* Load the background */
 	if (!background.loadFromFile("images/background.png")) {
 		printf("Couldn't load the background texture!\n");
+		success = false;
+	}
+
+	/* Load the snake texture, set color key to green */
+	SDL_Color green = { 0x00, 0xFF, 0x00, 0xFF };
+	if (!snakeTexture.loadFromFile("images/Snake-texture.png", &green)) {
+		printf("Couldn't load the snake texture!\n");
 		success = false;
 	}
 
