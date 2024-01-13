@@ -1,7 +1,8 @@
 #include "headers/Snake.h"
 
 Snake::Snake(Texture* texture, const SDL_Rect& headClip, const SDL_Rect& bodyClip, const SDL_Rect& tailClip, 
-	int width, int height, int posX, int posY, double angle) : m_texture(texture)
+	int width, int height, int posX, int posY, double angle) : m_texture(texture), m_dead(false),
+	m_direction(Snake_direction::STAY)
 {
 	/* Set clips */
 	m_clips[0] = headClip;
@@ -36,4 +37,72 @@ void Snake::render()
 
 	/* Render tail */
 	m_body[tail_index].render(&m_clips[2]);
+}
+
+void Snake::move(Snake_direction direction)
+{
+	/* If the snake shouldn't move */
+	if (direction == Snake_direction::STAY)
+		return;
+
+	/* Set the current direction */
+	m_direction = direction;
+
+	/* Check collisions with wall */
+	if (collisionWall()) {
+		m_dead = true;
+		return;
+	}
+
+	/* Move every segment to next position */
+	for (int i = m_body.size() - 1; i > 0; i--) {
+		SnakeSegment* next = &m_body[i - 1];
+		m_body[i].setPosition(next->getPosX(), next->getPosY());
+		m_body[i].setAngle(next->getAngle());
+	}
+
+	/* Pointer to head segment */
+	SnakeSegment* head = &m_body[0];
+
+	/* Move the head based on direction */
+	switch (m_direction) {
+	case Snake_direction::LEFT:
+		head->posX() -= head->getWidth();
+		head->setAngle(0);
+		break;
+
+	case Snake_direction::RIGHT:
+		head->posX() += head->getWidth();
+		head->setAngle(180);
+		break;
+	
+	case Snake_direction::UP:
+		head->posY() -= head->getHeight();
+		head->setAngle(90);
+		break;
+	
+	case Snake_direction::DOWN:
+		head->posY() += head->getHeight();
+		head->setAngle(270);
+		break;
+	}
+
+	/* Check collisions with body */
+	if (collisionBody())
+		m_dead = true;
+}
+
+bool Snake::isDead() const
+{
+	return m_dead;
+}
+
+bool Snake::collisionWall() const
+{
+	return false;
+}
+
+bool Snake::collisionBody() const
+{
+	return false;
 }

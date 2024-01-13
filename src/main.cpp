@@ -42,6 +42,8 @@ int main(int argc, char* args[])
 	Snake snake(&snakeTexture, { 0, 0, 32, 32 }, { 32, 0, 32, 32 }, { 64, 0, 32, 32 }, 
 		32, 32, 352, 256, 180.0);
 
+	Snake_direction currentDirection = Snake_direction::STAY;
+
 	/* Game loop */
 	while (!quit) {
 		/* Poll all events */
@@ -49,7 +51,28 @@ int main(int argc, char* args[])
 			/* If user closed the application set the close flag to true */
 			if (event.type == SDL_QUIT)
 				quit = true;
+			
+
+			/* Move the Snake based on the key */
+			if (event.type == SDL_KEYDOWN) {
+				switch (event.key.keysym.sym) {
+				case SDLK_UP:
+					currentDirection = Snake_direction::UP;
+					break;
+				case SDLK_DOWN:
+					currentDirection = Snake_direction::DOWN;
+					break;
+				case SDLK_LEFT:
+					currentDirection = Snake_direction::LEFT;
+					break;
+				case SDLK_RIGHT:
+					currentDirection = Snake_direction::RIGHT;
+					break;
+				}
+			}
 		}
+
+		snake.move(currentDirection);
 
 		/* Render background */
 		backgroundTexture.render(0, 0);

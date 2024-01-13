@@ -43,6 +43,11 @@ int& SnakeSegment::posY()
 	return m_posY;
 }
 
+double SnakeSegment::getAngle() const
+{
+	return m_angle;
+}
+
 void SnakeSegment::setWidth(int width)
 {
 	m_width = width;
@@ -51,6 +56,16 @@ void SnakeSegment::setWidth(int width)
 void SnakeSegment::setHeight(int height)
 {
 	m_height = height;
+}
+
+int SnakeSegment::getWidth() const
+{
+	return m_width;
+}
+
+int SnakeSegment::getHeight() const
+{
+	return m_height;
 }
 
 void SnakeSegment::setHead(bool flag)
@@ -66,6 +81,12 @@ void SnakeSegment::setTail(bool flag)
 void SnakeSegment::setAngle(double angle)
 {
 	m_angle = angle;
+}
+
+void SnakeSegment::setPosition(int posX, int posY)
+{
+	m_posX = posX;
+	m_posY = posY;
 }
 
 bool SnakeSegment::isThisHead() const
