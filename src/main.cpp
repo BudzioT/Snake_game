@@ -68,6 +68,10 @@ int main(int argc, char* args[])
 				case SDLK_RIGHT:
 					currentDirection = Snake_direction::RIGHT;
 					break;
+
+				case SDLK_g:
+					snake.grow();
+					break;
 				}
 			}
 		}

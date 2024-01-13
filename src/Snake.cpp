@@ -113,6 +113,33 @@ void Snake::move(Snake_direction direction)
 		m_dead = true;
 }
 
+void Snake::grow()
+{
+	/* Pointer to the tail of snake */
+	SnakeSegment* tail = &m_body[m_body.size() - 1];
+
+	/* Add segment with the same values as tail */
+	m_body.emplace_back(*tail);
+
+	/* Get the tail's angle */
+	int angle = static_cast<int>(tail->getAngle());
+	/* Move the tail back based of angle (tail's direction) */
+	switch (angle) {
+	case 0:
+		tail->posX() += tail->getWidth();
+		break;
+	case 180:
+		tail->posX() -= tail->getWidth();
+		break;
+	case 90:
+		tail->posY() -= tail->getHeight();
+		break;
+	case 270:
+		tail->posY() += tail->getHeight();
+		break;
+	}
+}
+
 void Snake::setMap(SDL_Rect newMap)
 {
 	m_map = newMap;
@@ -137,17 +164,35 @@ bool Snake::isDead() const
 
 bool Snake::collisionWall() const
 {
+	/* Pointer to snake's head */
 	const SnakeSegment* head = &m_body[0];
 
-	/* If snake's head is out of the map */
+	/* If snake's head is out of the map, there is a collision */
 	if ((head->getPosX() < m_map.x) || (head->getPosX() >= (m_map.x + m_map.w))
 		|| (head->getPosY() < m_map.y) || (head->getPosY() >= (m_map.y + m_map.h))) {
 		return true;
 	}
+
+	/* No collision with wall */
 	return false;
 }
 
 bool Snake::collisionBody() const
 {
+	/* Pointer to snake's head */
+	const SnakeSegment* head = &m_body[0];
+
+	/* Get head positions */
+	int headPosX = head->getPosX();
+	int headPosY = head->getPosY();
+
+	/* Go through every segment */
+	for (int i = 1; i < m_body.size(); i++) {
+		/* If head is inside one of the segments, there is a collision */
+		if ((m_body[i].getPosX() == headPosX) && (m_body[i].getPosY() == headPosY))
+			return true;
+	}
+
+	/* No collision with body */
 	return false;
 }
