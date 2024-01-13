@@ -34,6 +34,13 @@ public:
 	/* Grow the body by one segment */
 	void grow();
 
+	/* Change map position and dimensions */
+	void setMap(SDL_Rect newMap);
+	/* Change map dimensions */
+	void setMapDimensions(int width, int height);
+	/* Change map positions */
+	void setMapPositions(int posX, int posY);
+
 private:
 	/* Check head segment collisions with wall */
 	bool collisionWall() const;
@@ -41,12 +48,20 @@ private:
 	bool collisionBody() const;
 
 private:
+	/* Body - several segments */
 	std::vector<SnakeSegment> m_body;
 	
+	/* Texture */
 	Texture* m_texture;
+	/* Texture clips for: head, body, tail */
 	SDL_Rect m_clips[3];
 
+	/* Gameover flag */
 	bool m_dead;
 	
+	/* Direction snake is moving in */
 	Snake_direction m_direction;
+
+	/* Map dimensions */
+	SDL_Rect m_map;
 };

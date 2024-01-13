@@ -19,6 +19,9 @@ Snake::Snake(Texture* texture, const SDL_Rect& headClip, const SDL_Rect& bodyCli
 	/* Create tail */
 	m_body.emplace_back(posX - width, posY, angle);
 	m_body[1].setTail(true);
+
+	/* Set map default dimensions and positions */
+	m_map = { 0, 0, 640, 480 };
 }
 
 Snake::~Snake()
@@ -48,48 +51,83 @@ void Snake::move(Snake_direction direction)
 	/* Set the current direction */
 	m_direction = direction;
 
-	/* Check collisions with wall */
+	/* Pointer to head segment */
+	SnakeSegment* head = &m_body[0];
+
+	/* Movement variables */
+	int movementX = 0;
+	int movementY = 0;
+	int angle = head->getAngle();
+
+	/* Set the movement variables based on direction */
+	switch (m_direction) {
+	case Snake_direction::LEFT:
+		movementX -= head->getWidth();
+		angle = 0;
+		break;
+
+	case Snake_direction::RIGHT:
+		movementX += head->getWidth();
+		angle = 180;
+		break;
+
+	case Snake_direction::UP:
+		movementY -= head->getHeight();
+		angle = 90;
+		break;
+
+	case Snake_direction::DOWN:
+		movementY += head->getHeight();
+		angle = 270;
+		break;
+	}
+
+	/* Move the snake */
+	head->posX() += movementX;
+	head->posY() += movementY;
+
+	/* If snake is out of the screen, move it back and mark it as dead */
 	if (collisionWall()) {
 		m_dead = true;
+		head->posX() -= movementX;
+		head->posY() -= movementY;
 		return;
 	}
 
-	/* Move every segment to next position */
-	for (int i = m_body.size() - 1; i > 0; i--) {
+	/* Move every segment besides the first one before head to next position */
+	for (int i = m_body.size() - 1; i > 1; i--) {
 		SnakeSegment* next = &m_body[i - 1];
 		m_body[i].setPosition(next->getPosX(), next->getPosY());
 		m_body[i].setAngle(next->getAngle());
 	}
 
-	/* Pointer to head segment */
-	SnakeSegment* head = &m_body[0];
+	/* Set the first segment before head to the old head position and angle */
+	m_body[1].setPosition(head->getPosX() - movementX, head->getPosY() - movementY);
+	m_body[1].setAngle(head->getAngle());
 
-	/* Move the head based on direction */
-	switch (m_direction) {
-	case Snake_direction::LEFT:
-		head->posX() -= head->getWidth();
-		head->setAngle(0);
-		break;
-
-	case Snake_direction::RIGHT:
-		head->posX() += head->getWidth();
-		head->setAngle(180);
-		break;
-	
-	case Snake_direction::UP:
-		head->posY() -= head->getHeight();
-		head->setAngle(90);
-		break;
-	
-	case Snake_direction::DOWN:
-		head->posY() += head->getHeight();
-		head->setAngle(270);
-		break;
-	}
+	/* Set the correct head angle */
+	head->setAngle(angle);
 
 	/* Check collisions with body */
 	if (collisionBody())
 		m_dead = true;
+}
+
+void Snake::setMap(SDL_Rect newMap)
+{
+	m_map = newMap;
+}
+
+void Snake::setMapDimensions(int width, int height)
+{
+	m_map.w = width;
+	m_map.h = height;
+}
+
+void Snake::setMapPositions(int posX, int posY)
+{
+	m_map.x = posX;
+	m_map.y = posY;
 }
 
 bool Snake::isDead() const
@@ -99,6 +137,13 @@ bool Snake::isDead() const
 
 bool Snake::collisionWall() const
 {
+	const SnakeSegment* head = &m_body[0];
+
+	/* If snake's head is out of the map */
+	if ((head->getPosX() < m_map.x) || (head->getPosX() >= (m_map.x + m_map.w))
+		|| (head->getPosY() < m_map.y) || (head->getPosY() >= (m_map.y + m_map.h))) {
+		return true;
+	}
 	return false;
 }
 
