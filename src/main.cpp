@@ -14,6 +14,8 @@ SDL_Window* window = nullptr;
 /* Global renderer */
 SDL_Renderer* renderer = nullptr;
 
+Uint32 move_callback(Uint32 interval, void* param);
+
 
 int main(int argc, char* args[])
 {
@@ -42,7 +44,10 @@ int main(int argc, char* args[])
 	Snake snake(&snakeTexture, { 0, 0, 32, 32 }, { 32, 0, 32, 32 }, { 64, 0, 32, 32 }, 
 		32, 32, 352, 256, 180.0);
 
+	/* Snake stays in place when the game starts */
 	Snake_direction currentDirection = Snake_direction::STAY;
+
+	SDL_TimerID timerID = SDL_AddTimer(150, move_callback, &std::pair<Snake_direction&, Snake&>(currentDirection, snake));
 
 	/* Game loop */
 	while (!quit) {
@@ -76,7 +81,9 @@ int main(int argc, char* args[])
 			}
 		}
 
-		snake.move(currentDirection);
+		
+
+		//snake.move(currentDirection);
 
 		/* Render background */
 		backgroundTexture.render(0, 0);
@@ -84,10 +91,23 @@ int main(int argc, char* args[])
 		/* Render snake */
 		snake.render();
 
+		
+
 		SDL_RenderPresent(renderer);
 	}
+
+	SDL_RemoveTimer(timerID);
 
 	/* Cleanup */
 	close();
 	return 0;
+}
+
+Uint32 move_callback(Uint32 interval, void* param)
+{
+	std::pair<Snake_direction&, Snake&>* snake_info = reinterpret_cast<std::pair<Snake_direction&, Snake&>*>(param);
+	snake_info->second.move(snake_info->first);
+	std::cout << "Called";
+
+	return 150;
 }

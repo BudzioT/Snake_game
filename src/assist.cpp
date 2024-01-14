@@ -7,7 +7,7 @@
 bool initialize()
 {
 	/* Initialize SDL video */
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
 		printf("Couldn't initialize SDL video! SDL_Error: %s\n", SDL_GetError());
 		return false;
 	}
