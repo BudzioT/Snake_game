@@ -30,10 +30,11 @@ int main(int argc, char* args[])
 	/* Textures */
 	Texture backgroundTexture;
 	Texture snakeTexture;
+	Texture foodTexture;
 
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture);
 	
 	/* Close flag */
 	bool quit = false;

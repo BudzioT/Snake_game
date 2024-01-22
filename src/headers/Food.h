@@ -4,13 +4,27 @@
 class Food
 {
 public:
-	Food(int startPosX = 0, int startPosY = 0);
+	Food(Texture* texture, int startPosX = 0, int startPosY = 0, int width = 0, int height = 0);
 	~Food();
 
-	/* Set universal width*/
+	/* Set width*/
+	void setWidth(int width);
+	/* Set height */
+	void setHeight(int height);
+
+	/* Get width */
+	int getWidth() const;
+	/* Get height */
+	int getHeight() const;
+
+	/* Set texture */
+	void setTexture(Texture* texture);
 
 	/* Change position to the given arguments */
 	void changePosition(int posX, int posY);
+
+	/* Render food */
+	void render(SDL_Rect* clip = nullptr);
 
 private:
 	/* Universal width */
