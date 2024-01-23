@@ -196,3 +196,13 @@ bool Snake::collisionBody() const
 	/* No collision with body */
 	return false;
 }
+
+int Snake::getPosX() const
+{
+	return m_body[0].getPosX();
+}
+
+int Snake::getPosY() const
+{
+	return m_body[0].getPosY();
+}

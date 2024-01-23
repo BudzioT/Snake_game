@@ -1,7 +1,9 @@
 ﻿#include <iostream>
+#include <random>
 
 #include "headers/assist.h"
 #include "headers/Snake.h"
+#include "headers/Food.h"
 
 
 
@@ -30,19 +32,30 @@ int main(int argc, char* args[])
 	/* Textures */
 	Texture backgroundTexture;
 	Texture snakeTexture;
+	Texture foodTexture;
 
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture);
 	
 	/* Close flag */
 	bool quit = false;
 	/* Event variable */
 	SDL_Event event;
 
+	/* Prepare random numbers */
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> randX(0, 19);
+	std::uniform_int_distribution<int> randY(0, 14);
+
 	/* Create the snake */
 	Snake snake(&snakeTexture, { 0, 0, 32, 32 }, { 32, 0, 32, 32 }, { 64, 0, 32, 32 }, 
 		32, 32, 352, 256, 180.0);
+	
+
+	/* Create the food */
+	Food food(&foodTexture, randX(gen) * 32, randY(gen) * 32, 32, 32);
 
 	/* Snake stays in place when the game starts */
 	Snake_direction currentDirection = Snake_direction::STAY;
@@ -83,15 +96,26 @@ int main(int argc, char* args[])
 
 		
 
-		//snake.move(currentDirection);
+		if ((snake.getPosX() == food.getPosX()) && (snake.getPosY() == food.getPosY())) {
+			int posX = snake.getPosX();
+			int posY = snake.getPosY();
+			while (posX == snake.getPosX() || posY == snake.getPosY()) {
+				posX = randX(gen) * 32;
+				posY = randY(gen) * 32;
+			}
+
+			food.changePosition(posX, posY);
+			snake.grow();
+		}
 
 		/* Render background */
 		backgroundTexture.render(0, 0);
 
+		/* Render food */
+		food.render();
+
 		/* Render snake */
 		snake.render();
-
-		
 
 		SDL_RenderPresent(renderer);
 	}

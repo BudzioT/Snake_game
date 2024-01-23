@@ -15,7 +15,7 @@ extern SDL_Renderer* renderer;
 bool initialize();
 
 /* Loads all needed media */
-bool loadMedia(Texture& background, Texture& snakeTexture);
+bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture);
 
 /* Clean up before closing */
 void close();
