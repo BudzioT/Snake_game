@@ -34,6 +34,11 @@ public:
 	/* Grow the body by one segment */
 	void grow();
 
+	/* Get head X axis position */
+	int getPosX() const;
+	/* Get head Y axis position */
+	int getPosY() const;
+
 	/* Change map position and dimensions */
 	void setMap(SDL_Rect newMap);
 	/* Change map dimensions */

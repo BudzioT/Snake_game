@@ -58,3 +58,13 @@ void Food::render(SDL_Rect* clip)
 	if (m_texture)
 		m_texture->render(m_posX, m_posY, clip);
 }
+
+int Food::getPosX() const
+{
+	return m_posX;
+}
+
+int Food::getPosY() const
+{
+	return m_posY;
+}

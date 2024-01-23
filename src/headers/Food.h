@@ -17,6 +17,11 @@ public:
 	/* Get height */
 	int getHeight() const;
 
+	/* Get X axis position */
+	int getPosX() const;
+	/* Get Y axis position */
+	int getPosY() const;
+
 	/* Set texture */
 	void setTexture(Texture* texture);
 
