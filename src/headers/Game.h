@@ -12,13 +12,19 @@ class Game
 		int blockWidth = 0, int blockHeight = 0,
 		int mapHeight = 0, int mapWidth = 0, int mapX = 0, int mapY = 0, int snakeX = 0, int snakeY = 0);
 
-
+	void render();
 
 private:
 	/* Player - snake */
 	Snake m_snake;
 	/* Food which makes snake grow */
 	Food m_food;
+
+	/* Current snake direction */
+	Snake_direction m_currentDirection;
+	/* Timer which calls move */
+	SDL_TimerID m_timerID;
+
 	/* Seed source for randomness */
 	std::random_device m_device;
 	/* Random number engine */
