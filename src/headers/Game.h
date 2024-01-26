@@ -12,7 +12,19 @@ class Game
 		int blockWidth = 0, int blockHeight = 0,
 		int mapHeight = 0, int mapWidth = 0, int mapX = 0, int mapY = 0, int snakeX = 0, int snakeY = 0);
 
+	/* Render */
 	void render();
+
+	/* Start */
+	void start();
+
+	/* Change the snake speed, it moves one block per given amount of miliseconds */
+	void changeSpeed(Uint32 speed);
+
+private:
+	/* Move the snake */
+	Uint32 snakeMove(Uint32 interval);
+	static Uint32 snakeMove_callback(Uint32 interval, void* param);
 
 private:
 	/* Player - snake */
@@ -24,6 +36,9 @@ private:
 	Snake_direction m_currentDirection;
 	/* Timer which calls move */
 	SDL_TimerID m_timerID;
+
+	/* Snake speed, one block every given number of miliseconds */
+	Uint32 m_speed;
 
 	/* Seed source for randomness */
 	std::random_device m_device;
