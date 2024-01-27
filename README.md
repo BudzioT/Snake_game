@@ -15,7 +15,6 @@ SDL_mixer: https://github.com/libsdl-org/SDL_mixer/releases<br>
 - Download the SDL and SDL_image libraries
 - Direct your CMake cache to the correspording CMake folders from the orginal libraries
 - Move the .ddl files from the original libraries(include folder) to where your build is
-- If your build is in a folder, move the images, sounds folders into it
 - Build the project
 
 #### I hope you have fun
