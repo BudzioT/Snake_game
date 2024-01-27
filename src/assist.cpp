@@ -52,20 +52,20 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture)
 	bool success = true;
 
 	/* Load the background */
-	if (!background.loadFromFile("images/background.png")) {
+	if (!background.loadFromFile(IMAGE_DIR "background.png")) {
 		printf("Couldn't load the background texture!\n");
 		success = false;
 	}
 
 	/* Load the snake texture, set color key to green */
 	SDL_Color green = { 0x00, 0xFF, 0x00, 0xFF };
-	if (!snakeTexture.loadFromFile("images/Snake-texture.png", &green)) {
+	if (!snakeTexture.loadFromFile(IMAGE_DIR "snake-texture.png", &green)) {
 		printf("Couldn't load the snake texture!\n");
 		success = false;
 	}
 
 	/* Load the food texture, set color key to green */
-	if (!foodTexture.loadFromFile("images/food.png", &green)) {
+	if (!foodTexture.loadFromFile(IMAGE_DIR "food.png", &green)) {
 		printf("Couldn't load the food texture!\n");
 		success = false;
 	}
