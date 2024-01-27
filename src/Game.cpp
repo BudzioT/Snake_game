@@ -40,6 +40,11 @@ void Game::start()
 	m_timerID = SDL_AddTimer(m_speed, &Game::snakeMove_callback, this);
 }
 
+void Game::startScreen()
+{
+
+}
+
 void Game::handleEvents(const SDL_Event& event)
 {
 	/* If event is of key down type */

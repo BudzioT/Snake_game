@@ -20,6 +20,9 @@ public:
 	/* Start the game */
 	void start();
 
+	/* Start screen */
+	void startScreen();
+
 	/* Handle events */
 	void handleEvents(const SDL_Event& event);
 
