@@ -6,7 +6,8 @@ add_executable(Snake_Game "src/main.cpp" "src/headers/Game.h" "src/Game.cpp" "sr
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_IMAGE REQUIRED)
+find_package(SDL2_MIXER REQUIRED)
 
 target_include_directories(Snake_Game PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries(Snake_Game ${SDL2_LIBRARIES} SDL2_image::SDL2_image)
+target_link_libraries(Snake_Game ${SDL2_LIBRARIES} SDL2_image::SDL2_image SDL2_mixer::SDL2_mixer)
