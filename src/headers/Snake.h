@@ -46,6 +46,9 @@ public:
 	/* Change map positions */
 	void setMapPositions(int posX, int posY);
 
+	/* Check given element collision with snake's body */
+	bool elementCollisionBody(int posX, int posY) const;
+
 private:
 	/* Check head segment collisions with wall */
 	bool collisionWall() const;

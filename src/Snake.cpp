@@ -206,3 +206,15 @@ int Snake::getPosY() const
 {
 	return m_body[0].getPosY();
 }
+
+bool Snake::elementCollisionBody(int posX, int posY) const
+{
+	for (int i = 0; i < m_body.size(); i++) {
+		/* If element is inside of the body, there is a collision */
+		if ((posX == m_body[i].getPosX()) && (posY == m_body[i].getPosY()))
+			return true;
+	}
+
+	/* No collision with body */
+	return false;
+}
