@@ -1,7 +1,7 @@
 #include "headers/Game.h"
 
 Game::Game(Texture* snakeTexture, Texture* foodTexture,
-	const SDL_Rect snakeClips[3], int blockWidth, int blockHeight, int mapHeight, int mapWidth,
+	const SDL_Rect snakeClips[3], int blockWidth, int blockHeight, int mapWidth, int mapHeight,
 	int mapX, int mapY, int snakeX, int snakeY)
 	: m_snake(snakeTexture, snakeClips[0], snakeClips[1], snakeClips[2], blockWidth, blockHeight, 
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
@@ -9,7 +9,7 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture,
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1)
 {
 	/* Set map dimensions */
-	m_snake.setMap({ mapX, mapY, mapHeight, mapWidth });
+	m_snake.setMap({ mapX, mapY, mapWidth, mapHeight });
 
 	/* Food dimensions */
 	int foodWidth = m_food.getWidth();
@@ -109,12 +109,29 @@ Uint32 Game::snakeMove(Uint32 interval)
 {
 	/* Move the snake in the given direction */
 	m_snake.move(m_currentDirection);
+	
+	/* Check if snake is dead */
+	if (m_snake.isDead())
+		gameOver();
+
 	/* Return the same speed for the next movement */
 	return m_speed;
+}
+
+void Game::gameOver()
+{
+	/* End the game */
+	end();
 }
 
 Uint32 Game::snakeMove_callback(Uint32 interval, void* param)
 {
 	/* Call the snakeMove function on the given game */
 	return (reinterpret_cast<Game*>(param)->snakeMove(interval));
+}
+
+void Game::end()
+{
+	/* Removes the game timer */
+	SDL_RemoveTimer(m_timerID);
 }

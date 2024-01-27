@@ -17,7 +17,7 @@ public:
 	/* Render */
 	void render();
 
-	/* Start */
+	/* Start the game */
 	void start();
 
 	/* Handle events */
@@ -26,13 +26,20 @@ public:
 	/* Game process */
 	void process();
 
+	/* Game over screen */
+	void gameOver();
+
 	/* Change the snake speed, it moves one block per given amount of miliseconds */
 	void changeSpeed(Uint32 speed);
 
 private:
 	/* Move the snake */
 	Uint32 snakeMove(Uint32 interval);
+	/* Move callback */
 	static Uint32 snakeMove_callback(Uint32 interval, void* param);
+
+	/* Ends the game */
+	void end();
 
 private:
 	/* Player - snake */
