@@ -6,10 +6,10 @@ This game is written in C++, with CMake, using following libraries:<br>
 - SDL2_mixer v-2.8.0
 
 ## :page_facing_up: Links to libraries
-SDL website: https://www.libsdl.org/
-SDL: https://github.com/libsdl-org/SDL/releases/tag/release-2.28.5
-SDL_image: https://github.com/libsdl-org/SDL_image/releases
-SDL_mixer: https://github.com/libsdl-org/SDL_mixer/releases
+SDL website: https://www.libsdl.org/<br>
+SDL: https://github.com/libsdl-org/SDL/releases/tag/release-2.28.5<br>
+SDL_image: https://github.com/libsdl-org/SDL_image/releases<br>
+SDL_mixer: https://github.com/libsdl-org/SDL_mixer/releases<br>
 
 ## :video_game: How to build the project
 - Download the SDL and SDL_image libraries
