@@ -5,6 +5,7 @@
 #include "headers/Snake.h"
 #include "headers/Food.h"
 #include "headers/Game.h"
+#include "headers/Sounds.h"
 
 
 
@@ -33,8 +34,16 @@ int main(int argc, char* args[])
 	Texture snakeTexture;
 	Texture foodTexture;
 
+	/* Sound effects */
+	Mix_Chunk* eatSound = nullptr;
+
+
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture, foodTexture);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound);
+
+	/* All sounds */
+	Sounds sounds;
+	sounds.addSoundEffect(*eatSound);
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {
@@ -79,6 +88,6 @@ int main(int argc, char* args[])
 	}
 
 	/* Cleanup */
-	close();
+	close(&eatSound);
 	return 0;
 }

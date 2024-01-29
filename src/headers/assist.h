@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "Texture.h"
 
 /* Window dimensions */
@@ -15,7 +16,7 @@ extern SDL_Renderer* renderer;
 bool initialize();
 
 /* Loads all needed media */
-bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture);
+bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound);
 
 /* Clean up before closing */
-void close();
+void close(Mix_Chunk** eatSound = nullptr);

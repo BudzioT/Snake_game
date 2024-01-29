@@ -45,6 +45,11 @@ void Game::startScreen()
 
 }
 
+void Game::addSounds(Sounds sounds)
+{
+	m_sounds = sounds;
+}
+
 void Game::handleEvents(const SDL_Event& event)
 {
 	/* If event is of key down type */

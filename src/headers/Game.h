@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "Snake.h"
 #include "Food.h"
+#include "Sounds.h"
 
 /* Main game logic, it manages all the game mechanics, puts it in one, full whole */
 class Game
@@ -16,6 +17,9 @@ public:
 
 	/* Render */
 	void render();
+
+	/* Add sounds */
+	void addSounds(Sounds sounds);
 
 	/* Start the game */
 	void start();
@@ -49,6 +53,9 @@ private:
 	Snake m_snake;
 	/* Food which makes snake grow */
 	Food m_food;
+
+	/* Sounds */
+	Sounds m_sounds;
 
 	/* Current snake direction */
 	Snake_direction m_currentDirection;

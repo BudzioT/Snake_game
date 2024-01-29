@@ -1,6 +1,5 @@
 #include "headers/assist.h"
 #include "SDL_image.h"
-#include "SDL_mixer.h"
 
 #include <stdio.h>
 
@@ -46,11 +45,12 @@ bool initialize()
 	return true;
 }
 
-bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture)
+bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound)
 {
 	/* Success flag */
 	bool success = true;
 
+	/* LOAD TEXTURES */
 	/* Load the background */
 	if (!background.loadFromFile(IMAGE_DIR "background.png")) {
 		printf("Couldn't load the background texture!\n");
@@ -70,10 +70,18 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture)
 		success = false;
 	}
 
+	/* LOAD SOUND EFFECTS */
+	/* Load eat sound */
+	*eatSound = Mix_LoadWAV(SOUND_DIR "eating.mp3");
+	if (*eatSound == nullptr) {
+		printf("Couldn't load the eat sound! Mix_Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	return success;
 }
 
-void close()
+void close(Mix_Chunk** eatSound)
 {
 	/* Destroy window */
 	if (window) {
@@ -85,6 +93,12 @@ void close()
 	if (renderer) {
 		SDL_DestroyRenderer(renderer);
 		renderer = nullptr;
+	}
+
+	/* Free sounds effects */
+	if (*eatSound) {
+		Mix_FreeChunk(*eatSound);
+		*eatSound = nullptr;
 	}
 
 	/* Quit the libraries */
