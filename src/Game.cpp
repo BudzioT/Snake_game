@@ -6,7 +6,8 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture,
 	: m_snake(snakeTexture, snakeClips[0], snakeClips[1], snakeClips[2], blockWidth, blockHeight, 
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
 		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
-		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1)
+		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
+		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr)
 {
 	/* Set map dimensions */
 	m_snake.setMap({ mapX, mapY, mapWidth, mapHeight });
@@ -45,9 +46,11 @@ void Game::startScreen()
 
 }
 
-void Game::addSounds(Sounds sounds)
+void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)
 {
-	m_sounds = sounds;
+	m_soundEating = &eating;
+	m_soundHitWall = &hitWall;
+	m_soundHitBody = &hitBody;
 }
 
 void Game::handleEvents(const SDL_Event& event)
@@ -101,6 +104,9 @@ void Game::process()
 			posY = m_randY(m_gen) * foodHeight;
 		} while (m_snake.elementCollisionBody(posX, posY));
 
+		/* Play the eat sound */
+		Mix_PlayChannel(-1, m_soundEating, 0);
+
 		/* Change the position */
 		m_food.changePosition(posX, posY);
 		
@@ -121,8 +127,16 @@ Uint32 Game::snakeMove(Uint32 interval)
 	m_snake.move(m_currentDirection);
 	
 	/* Check if snake is dead */
-	if (m_snake.isDead())
+	if (m_snake.isDead()) {
+		/* If the reason is hitting a wall, play the wall hit sound effect */
+		if (m_snake.isDeadByWall())
+			Mix_PlayChannel(-1, m_soundHitWall, 0);
+		/* If the reason is hitting a body, play the body hit sound effect */
+		else
+			Mix_PlayChannel(-1, m_soundHitBody, 0);
+		/* Show the gameover screen */
 		gameOver();
+	}
 
 	/* Return the same speed for the next movement */
 	return m_speed;

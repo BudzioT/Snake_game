@@ -16,7 +16,8 @@ extern SDL_Renderer* renderer;
 bool initialize();
 
 /* Loads all needed media */
-bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound);
+bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound, 
+	Mix_Chunk** hitWall, Mix_Chunk** hitBody);
 
 /* Clean up before closing */
-void close(Mix_Chunk** eatSound = nullptr);
+void close(Mix_Chunk** eatSound = nullptr, Mix_Chunk** hitWall = nullptr, Mix_Chunk** hitBody = nullptr);

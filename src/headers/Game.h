@@ -18,8 +18,11 @@ public:
 	/* Render */
 	void render();
 
-	/* Add sounds */
-	void addSounds(Sounds sounds);
+	/* Add sounds 
+	Sound effects: eating, hitting wall, hitting body
+	Music: theme
+	*/
+	void addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody);
 
 	/* Start the game */
 	void start();
@@ -54,8 +57,12 @@ private:
 	/* Food which makes snake grow */
 	Food m_food;
 
-	/* Sounds */
-	Sounds m_sounds;
+	/* Eating sound */
+	Mix_Chunk* m_soundEating;
+	/* Wall hit sound */
+	Mix_Chunk* m_soundHitWall;
+	/* Body hit sound */
+	Mix_Chunk* m_soundHitBody;
 
 	/* Current snake direction */
 	Snake_direction m_currentDirection;

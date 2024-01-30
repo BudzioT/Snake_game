@@ -27,6 +27,8 @@ public:
 
 	/* Is snake dead */
 	bool isDead() const;
+	/* Is the death reason hitting a wall */
+	bool isDeadByWall() const;
 
 	/* Move the snake in the given direction */
 	void move(Snake_direction direction);
@@ -51,7 +53,7 @@ public:
 
 private:
 	/* Check head segment collisions with wall */
-	bool collisionWall() const;
+	bool collisionWall();
 	/* Check head segment collisions with the rest of the snake's body */
 	bool collisionBody() const;
 
@@ -66,6 +68,7 @@ private:
 
 	/* Gameover flag */
 	bool m_dead;
+	bool m_wall;
 	
 	/* Direction snake is moving in */
 	Snake_direction m_direction;

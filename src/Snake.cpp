@@ -1,8 +1,8 @@
 #include "headers/Snake.h"
 
 Snake::Snake(Texture* texture, const SDL_Rect& headClip, const SDL_Rect& bodyClip, const SDL_Rect& tailClip, 
-	int width, int height, int posX, int posY, double angle) : m_texture(texture), m_dead(false),
-	m_direction(Snake_direction::STAY)
+	int width, int height, int posX, int posY, double angle) : m_texture(texture), m_dead(false), 
+	m_wall(false), m_direction(Snake_direction::STAY)
 {
 	/* Set clips */
 	m_clips[0] = headClip;
@@ -162,7 +162,12 @@ bool Snake::isDead() const
 	return m_dead;
 }
 
-bool Snake::collisionWall() const
+bool Snake::isDeadByWall() const
+{
+	return m_wall;
+}
+
+bool Snake::collisionWall()
 {
 	/* Pointer to snake's head */
 	const SnakeSegment* head = &m_body[0];
@@ -170,6 +175,7 @@ bool Snake::collisionWall() const
 	/* If snake's head is out of the map, there is a collision */
 	if ((head->getPosX() < m_map.x) || (head->getPosX() >= (m_map.x + m_map.w))
 		|| (head->getPosY() < m_map.y) || (head->getPosY() >= (m_map.y + m_map.h))) {
+		m_wall = true;
 		return true;
 	}
 

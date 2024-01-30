@@ -36,14 +36,12 @@ int main(int argc, char* args[])
 
 	/* Sound effects */
 	Mix_Chunk* eatSound = nullptr;
+	Mix_Chunk* hitWall = nullptr;
+	Mix_Chunk* hitBody = nullptr;
 
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound);
-
-	/* All sounds */
-	Sounds sounds;
-	sounds.addSoundEffect(*eatSound);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody);
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {
@@ -54,6 +52,8 @@ int main(int argc, char* args[])
 
 	/* Create the game */
 	Game game(&snakeTexture, &foodTexture, snakeClips, 32, 32, 640, 480, 0, 0, 352, 256);
+
+	game.addSounds(*eatSound, *hitWall, *hitBody);
 
 	game.start();
 
@@ -88,6 +88,6 @@ int main(int argc, char* args[])
 	}
 
 	/* Cleanup */
-	close(&eatSound);
+	close(&eatSound, &hitWall, &hitBody);
 	return 0;
 }

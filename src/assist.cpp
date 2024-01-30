@@ -45,7 +45,8 @@ bool initialize()
 	return true;
 }
 
-bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound)
+bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound,
+	Mix_Chunk** hitWall, Mix_Chunk** hitBody)
 {
 	/* Success flag */
 	bool success = true;
@@ -78,10 +79,24 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 		success = false;
 	}
 
+	/* Load wall hit sound */
+	*hitWall = Mix_LoadWAV(SOUND_DIR "wallHit.mp3");
+	if (*hitWall == nullptr) {
+		printf("Couldn't load the wall hit sound! Mix_Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	/* Load body hit sound */
+	*hitBody = Mix_LoadWAV(SOUND_DIR "bodyHit.mp3");
+	if (*hitBody = nullptr) {
+		printf("Couldn't load the body hit sound! Mix_Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	return success;
 }
 
-void close(Mix_Chunk** eatSound)
+void close(Mix_Chunk** eatSound, Mix_Chunk** hitWall, Mix_Chunk** hitBody)
 {
 	/* Destroy window */
 	if (window) {
@@ -99,6 +114,14 @@ void close(Mix_Chunk** eatSound)
 	if (*eatSound) {
 		Mix_FreeChunk(*eatSound);
 		*eatSound = nullptr;
+	}
+	if (*hitWall) {
+		Mix_FreeChunk(*hitWall);
+		*hitWall = nullptr;
+	}
+	if (*hitBody) {
+		Mix_FreeChunk(*hitBody);
+		*hitBody = nullptr;
 	}
 
 	/* Quit the libraries */

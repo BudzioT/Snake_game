@@ -18,12 +18,18 @@ void Sounds::addMusic(Mix_Music& music)
 
 Mix_Chunk* Sounds::getSoundEffect(int index)
 {
-	return m_soundEffects[index];
+	if (index > 0 && index < m_soundEffects.size())
+		return m_soundEffects[index];
+	else
+		return nullptr;
 }
 
 Mix_Music* Sounds::getMusic(int index)
 {
-	return m_music[index];
+	if (index > 0 && index < m_music.size())
+		return m_music[index];
+	else
+		return nullptr;
 }
 
 int Sounds::numberSoundEffects() const
