@@ -5,7 +5,6 @@
 #include "headers/Snake.h"
 #include "headers/Food.h"
 #include "headers/Game.h"
-#include "headers/Sounds.h"
 
 
 
@@ -52,6 +51,7 @@ int main(int argc, char* args[])
 
 	/* Create the game */
 	Game game(&snakeTexture, &foodTexture, snakeClips, 32, 32, 640, 480, 0, 0, 352, 256);
+
 
 	game.addSounds(*eatSound, *hitWall, *hitBody);
 

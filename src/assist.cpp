@@ -88,7 +88,7 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 
 	/* Load body hit sound */
 	*hitBody = Mix_LoadWAV(SOUND_DIR "bodyHit.mp3");
-	if (*hitBody = nullptr) {
+	if (*hitBody == nullptr) {
 		printf("Couldn't load the body hit sound! Mix_Error: %s\n", Mix_GetError());
 		success = false;
 	}

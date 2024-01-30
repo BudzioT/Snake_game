@@ -1,10 +1,10 @@
 #pragma once
 #include <random>
 
+#include "SDL_mixer.h"
 #include "Texture.h"
 #include "Snake.h"
 #include "Food.h"
-#include "Sounds.h"
 
 /* Main game logic, it manages all the game mechanics, puts it in one, full whole */
 class Game
