@@ -100,27 +100,27 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 	}
 
 	/* LOAD FONTS */
-	headerFont = TTF_OpenFont(FONT_DIR "main.ttf", 28);
+	headerFont = TTF_OpenFont(FONT_DIR "main.ttf", 45);
 	if (!headerFont) {
 		printf("Couldn't load the header font! TTF_Error: %s\n", TTF_GetError());
 		success = false;
 	}
 	else {
 		/* Render header start text with black color */
-		if (!headerText.loadFromText("Snake Game", &*headerFont, { 0, 0, 0 })) {
+		if (!headerText.loadFromText("Snake Game", headerFont, { 200, 0, 0 })) {
 			printf("Failed to load the header start text!\n");
 			success = false;
 		}
 	}
 
-	subFont = TTF_OpenFont(FONT_DIR "main.ttf", 15);
+	subFont = TTF_OpenFont(FONT_DIR "main.ttf", 25);
 	if (!subFont) {
 		printf("Couldn't load the sub font! TTF_Error: %s\n", TTF_GetError());
 		success = false;
 	}
 	else {
 		/* Render sub start text with dark blue color */
-		if (!subText.loadFromText("Click enter to start!", &*subFont, { 9, 75, 97 })) {
+		if (!subText.loadFromText("Click enter to start!", subFont, { 9, 75, 97 })) {
 			printf("Failed to load the sub start text!\n");
 			success = false;
 		}

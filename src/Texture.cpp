@@ -53,7 +53,7 @@ bool Texture::loadFromText(const std::string& text, TTF_Font* font, SDL_Color co
 	free();
 
 	/* Load text */
-	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), color);
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
 	if (!textSurface) {
 		printf("Couldn't load text surface! TTF_Error: %s\n", TTF_GetError());
 		return false;

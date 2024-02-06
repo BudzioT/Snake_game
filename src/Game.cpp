@@ -7,7 +7,8 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture,
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
 		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
-		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr)
+		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr),
+		m_headerText(nullptr), m_subText(nullptr)
 {
 	/* Set map dimensions */
 	m_snake.setMap({ mapX, mapY, mapWidth, mapHeight });
@@ -43,7 +44,14 @@ void Game::start()
 
 void Game::startScreen()
 {
-	
+	SDL_RenderClear(renderer);
+
+	/* Render header text */
+	m_headerText->render(((WINDOW_WIDTH / 2) - (m_headerText->width() / 2)),
+		((WINDOW_HEIGHT / 4) - (m_headerText->height() / 2)));
+	/* Render sub text */
+	m_subText->render(((WINDOW_WIDTH / 2) - (m_subText->width() / 2)), 
+		((WINDOW_HEIGHT / 1.5) - (m_subText->height() / 2)));
 }
 
 void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)
@@ -51,6 +59,12 @@ void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)
 	m_soundEating = &eating;
 	m_soundHitWall = &hitWall;
 	m_soundHitBody = &hitBody;
+}
+
+void Game::addText(Texture& header, Texture& sub)
+{
+	m_headerText = &header;
+	m_subText = &sub;
 }
 
 void Game::handleEvents(const SDL_Event& event)
@@ -135,7 +149,7 @@ Uint32 Game::snakeMove(Uint32 interval)
 		else
 			Mix_PlayChannel(-1, m_soundHitBody, 0);
 		/* Show the gameover screen */
-		gameOver();
+		end();
 	}
 
 	/* Return the same speed for the next movement */
@@ -144,8 +158,7 @@ Uint32 Game::snakeMove(Uint32 interval)
 
 void Game::gameOver()
 {
-	/* End the game */
-	end();
+	
 }
 
 Uint32 Game::snakeMove_callback(Uint32 interval, void* param)

@@ -6,12 +6,6 @@
 #include "headers/Food.h"
 #include "headers/Game.h"
 
-
-
-/* Windowe dimensions */
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
-
 /* Global window */
 SDL_Window* window = nullptr;
 /* Global renderer */
@@ -60,18 +54,52 @@ int main(int argc, char* args[])
 	Game game(&snakeTexture, &foodTexture, snakeClips, 32, 32, 640, 480, 0, 0, 352, 256);
 
 
+	/* Initialize the rest of the game */
 	game.addSounds(*eatSound, *hitWall, *hitBody);
+	game.addText(headerText, subText);
 
 	game.start();
 
 
 	/* Close flag */
 	bool quit = false;
+	bool startScreen = true;
 	/* Event variable */
 	SDL_Event event;
 
 	/* Game loop */
 	while (!quit) {
+		/* Start screen rendering */
+		while (startScreen) {
+			/* Poll events */
+			while (SDL_PollEvent(&event)) {
+				if (event.type == SDL_QUIT) {
+					startScreen = false;
+					quit = true;
+				}
+
+				if (event.type == SDL_KEYDOWN) {
+					switch (event.key.keysym.sym) {
+					case SDLK_RETURN:
+						startScreen = false;
+						break;
+					case SDLK_ESCAPE:
+						startScreen = false;
+						quit = true;
+						break;
+					}
+
+				}
+			}
+
+			/* Render start screen */
+			game.startScreen();
+
+			/* Clear renderer */
+			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderPresent(renderer);
+		}
+
 		/* Poll all events */
 		while (SDL_PollEvent(&event)) {
 			/* If user closed the application set the close flag to true */
@@ -91,6 +119,7 @@ int main(int argc, char* args[])
 		/* Render game */
 		game.render();
 
+		SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderPresent(renderer);
 	}
 

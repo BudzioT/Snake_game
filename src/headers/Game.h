@@ -6,6 +6,10 @@
 #include "Snake.h"
 #include "Food.h"
 
+/* Window dimensions */
+const int WINDOW_WIDTH = 640;
+const int WINDOW_HEIGHT = 480;
+
 /* Main game logic, it manages all the game mechanics, puts it in one, full whole */
 class Game
 {
@@ -23,6 +27,9 @@ public:
 	Music: theme
 	*/
 	void addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody);
+
+	/* Add start and end text */
+	void addText(Texture& header, Texture& sub);
 
 	/* Start the game */
 	void start();
@@ -42,14 +49,15 @@ public:
 	/* Change the snake speed, it moves one block per given amount of miliseconds */
 	void changeSpeed(Uint32 speed);
 
+	/* Ends the game */
+	void end();
+
 private:
 	/* Move the snake */
 	Uint32 snakeMove(Uint32 interval);
 	/* Move callback */
 	static Uint32 snakeMove_callback(Uint32 interval, void* param);
-
-	/* Ends the game */
-	void end();
+	
 
 private:
 	/* Player - snake */
@@ -63,6 +71,9 @@ private:
 	Mix_Chunk* m_soundHitWall;
 	/* Body hit sound */
 	Mix_Chunk* m_soundHitBody;
+
+	Texture* m_headerText;
+	Texture* m_subText;
 
 	/* Current snake direction */
 	Snake_direction m_currentDirection;
