@@ -43,7 +43,7 @@ void Game::start()
 
 void Game::startScreen()
 {
-
+	
 }
 
 void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)

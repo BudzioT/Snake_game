@@ -16,6 +16,9 @@ const int WINDOW_HEIGHT = 480;
 SDL_Window* window = nullptr;
 /* Global renderer */
 SDL_Renderer* renderer = nullptr;
+/* Global fonts */
+TTF_Font* headerFont = nullptr;
+TTF_Font* subFont = nullptr;
 
 
 int main(int argc, char* args[])
@@ -38,9 +41,13 @@ int main(int argc, char* args[])
 	Mix_Chunk* hitWall = nullptr;
 	Mix_Chunk* hitBody = nullptr;
 
+	/* Text textures */
+	Texture headerText;
+	Texture subText;
+
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText, subText);
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {

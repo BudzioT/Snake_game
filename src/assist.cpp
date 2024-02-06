@@ -24,6 +24,12 @@ bool initialize()
 		return false;
 	}
 
+	/* Initialize SDL_ttf */
+	if (TTF_Init() == -1) {
+		printf("Couldn't initialize SDL_ttf! TTF_Error: %s\n", TTF_GetError());
+		return false;
+	}
+
 	/* Create window */
 	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
@@ -46,7 +52,7 @@ bool initialize()
 }
 
 bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound,
-	Mix_Chunk** hitWall, Mix_Chunk** hitBody)
+	Mix_Chunk** hitWall, Mix_Chunk** hitBody, Texture& headerText, Texture& subText)
 {
 	/* Success flag */
 	bool success = true;
@@ -93,6 +99,33 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 		success = false;
 	}
 
+	/* LOAD FONTS */
+	headerFont = TTF_OpenFont(FONT_DIR "main.ttf", 28);
+	if (!headerFont) {
+		printf("Couldn't load the header font! TTF_Error: %s\n", TTF_GetError());
+		success = false;
+	}
+	else {
+		/* Render header start text with black color */
+		if (!headerText.loadFromText("Snake Game", &*headerFont, { 0, 0, 0 })) {
+			printf("Failed to load the header start text!\n");
+			success = false;
+		}
+	}
+
+	subFont = TTF_OpenFont(FONT_DIR "main.ttf", 15);
+	if (!subFont) {
+		printf("Couldn't load the sub font! TTF_Error: %s\n", TTF_GetError());
+		success = false;
+	}
+	else {
+		/* Render sub start text with dark blue color */
+		if (!subText.loadFromText("Click enter to start!", &*subFont, { 9, 75, 97 })) {
+			printf("Failed to load the sub start text!\n");
+			success = false;
+		}
+	}
+
 	return success;
 }
 
@@ -108,6 +141,16 @@ void close(Mix_Chunk** eatSound, Mix_Chunk** hitWall, Mix_Chunk** hitBody)
 	if (renderer) {
 		SDL_DestroyRenderer(renderer);
 		renderer = nullptr;
+	}
+	
+	/* Close fonts */
+	if (headerFont) {
+		TTF_CloseFont(headerFont);
+		headerFont = nullptr;
+	}
+	if (subFont) {
+		TTF_CloseFont(subFont);
+		subFont = nullptr;
 	}
 
 	/* Free sounds effects */
@@ -127,4 +170,5 @@ void close(Mix_Chunk** eatSound, Mix_Chunk** hitWall, Mix_Chunk** hitBody)
 	/* Quit the libraries */
 	SDL_Quit();
 	IMG_Quit();
+	TTF_Quit();
 }

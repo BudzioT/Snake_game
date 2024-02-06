@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL.h"
+#include "SDL_ttf.h"
 
 #include <string>
 
@@ -20,6 +21,9 @@ public:
 
 	/* Load texture from file at the specified path */
 	bool loadFromFile(const std::string& path, SDL_Color* colorKey = nullptr);
+
+	/* Load texture from string */
+	bool loadFromText(const std::string& text, TTF_Font* font, SDL_Color color);
 
 	/* Deallocate memory */
 	void free();
