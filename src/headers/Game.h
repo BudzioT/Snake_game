@@ -6,9 +6,9 @@
 #include "Snake.h"
 #include "Food.h"
 
-/* Window dimensions */
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
+/* Game screen dimensions */
+const int GAME_WIDTH = 640;
+const int GAME_HEIGHT = 480;
 
 /* Main game logic, it manages all the game mechanics, puts it in one, full whole */
 class Game
@@ -30,6 +30,9 @@ public:
 
 	/* Add start and end text */
 	void addText(Texture& header, Texture& sub);
+
+	/* Add static background */
+	void addBackground(Texture& background);
 
 	/* Start the game */
 	void start(int posX, int posY);
@@ -68,6 +71,9 @@ private:
 	/* Snake start position */
 	std::pair<int, int> m_startPos;
 
+	/* Map dimensions */
+	SDL_Rect m_map;
+
 	/* Eating sound */
 	Mix_Chunk* m_soundEating;
 	/* Wall hit sound */
@@ -79,6 +85,9 @@ private:
 	Texture* m_headerText;
 	/* Sub text */
 	Texture* m_subText;
+
+	/* Background texture */
+	Texture* m_background;
 
 	/* Current snake direction */
 	Snake_direction m_currentDirection;

@@ -34,7 +34,7 @@ void Snake::render()
 	m_body[0].render(&m_clips[0]);
 
 	/* Render body */
-	int tail_index = m_body.size() - 1;
+	int tail_index = static_cast<int>(m_body.size() - 1);
 	for (int i = 1; i < tail_index; i++)
 		m_body[i].render(&m_clips[1]);
 

@@ -8,10 +8,11 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClip
 		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
 		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr),
-		m_headerText(nullptr), m_subText(nullptr), m_end(end), m_startPos(snakeX, snakeY)
+		m_headerText(nullptr), m_subText(nullptr), m_background(nullptr), 
+		m_end(end), m_startPos(snakeX, snakeY), m_map{ mapX, mapY, mapWidth, mapHeight }
 {
 	/* Set map dimensions */
-	m_snake.setMap({ mapX, mapY, mapWidth, mapHeight });
+	m_snake.setMap(m_map);
 
 	/* Food dimensions */
 	int foodWidth = m_food.getWidth();
@@ -19,7 +20,7 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClip
 
 	/* Change the food position until it's out of the snake's body */
 	do {
-		m_food.changePosition(m_randX(m_gen) * foodWidth, m_randY(m_gen) * foodHeight);
+		m_food.changePosition(m_randX(m_gen) * foodWidth + mapX, m_randY(m_gen) * foodHeight + mapY);
 	} while (m_snake.elementCollisionBody(m_food.getPosX(), m_food.getPosY()));
 }
 
@@ -30,6 +31,9 @@ Game::~Game()
 
 void Game::render()
 {
+	/* Render background */
+	m_background->render(m_map.x, m_map.y);
+
 	/* Render food */
 	m_food.render();
 	/* Render snake above the food */
@@ -56,11 +60,11 @@ void Game::startScreen()
 	SDL_RenderClear(renderer);
 
 	/* Render header text */
-	m_headerText->render(((WINDOW_WIDTH / 2) - (m_headerText->width() / 2)),
-		((WINDOW_HEIGHT / 4) - (m_headerText->height() / 2)));
+	m_headerText->render(((GAME_WIDTH / 2) - (m_headerText->width() / 2) + m_map.x),
+		((GAME_HEIGHT / 4) - (m_headerText->height() / 2) + m_map.y));
 	/* Render sub text */
-	m_subText->render(((WINDOW_WIDTH / 2) - (m_subText->width() / 2)), 
-		((WINDOW_HEIGHT / 1.5) - (m_subText->height() / 2)));
+	m_subText->render(((GAME_WIDTH / 2) - (m_subText->width() / 2) + m_map.x),
+		((GAME_HEIGHT / 1.5) - (m_subText->height() / 2) + m_map.y));
 }
 
 void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)
@@ -74,6 +78,11 @@ void Game::addText(Texture& header, Texture& sub)
 {
 	m_headerText = &header;
 	m_subText = &sub;
+}
+
+void Game::addBackground(Texture& background)
+{
+	m_background = &background;
 }
 
 void Game::handleEvents(const SDL_Event& event)
@@ -123,8 +132,8 @@ void Game::process()
 	if ((posX == m_food.getPosX()) && (posY == m_food.getPosY())) {
 		/* Set food position to random until it is out of the snakes body */
 		do {
-			posX = m_randX(m_gen) * foodWidth;
-			posY = m_randY(m_gen) * foodHeight;
+			posX = m_randX(m_gen) * foodWidth + m_map.x;
+			posY = m_randY(m_gen) * foodHeight + m_map.y;
 		} while (m_snake.elementCollisionBody(posX, posY));
 
 		/* Play the eat sound */
@@ -170,11 +179,11 @@ void Game::gameOver()
 	SDL_RenderClear(renderer);
 
 	/* Render header text */
-	m_headerText->render(((WINDOW_WIDTH / 2) - (m_headerText->width() / 2)),
-		((WINDOW_HEIGHT / 4) - (m_headerText->height() / 2)));
+	m_headerText->render(((GAME_WIDTH / 2) - (m_headerText->width() / 2) + m_map.x),
+		((GAME_HEIGHT / 4) - (m_headerText->height() / 2) + m_map.y));
 	/* Render sub text */
-	m_subText->render(((WINDOW_WIDTH / 2) - (m_subText->width() / 2)),
-		((WINDOW_HEIGHT / 1.5) - (m_subText->height() / 2)));
+	m_subText->render(((GAME_WIDTH / 2) - (m_subText->width() / 2) + m_map.x),
+		((GAME_HEIGHT / 1.5) - (m_subText->height() / 2) + m_map.y));
 }
 
 Uint32 Game::snakeMove_callback(Uint32 interval, void* param)

@@ -14,6 +14,10 @@ SDL_Renderer* renderer = nullptr;
 TTF_Font* headerFont = nullptr;
 TTF_Font* subFont = nullptr;
 
+/* Window dimensions */
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 700;
+
 
 int main(int argc, char* args[])
 {
@@ -39,9 +43,14 @@ int main(int argc, char* args[])
 	Texture headerText;
 	Texture subText;
 
+	/* Map start points */
+	int mapX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+	int mapY = (WINDOW_HEIGHT - GAME_HEIGHT) / 2;
+
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText, subText);
+	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText, 
+		subText);
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {
@@ -58,12 +67,14 @@ int main(int argc, char* args[])
 	bool gameOver = false;
 
 	/* Create the game */
-	Game game(&snakeTexture, &foodTexture, snakeClips, gameOver, 32, 32, 640, 480, 0, 0, 352, 256);
+	Game game(&snakeTexture, &foodTexture, snakeClips, gameOver, 32, 32, 640, 480, mapX, mapY, 
+		352 + mapX, 256 + mapY);
 
 
 	/* Initialize the rest of the game */
 	game.addSounds(*eatSound, *hitWall, *hitBody);
 	game.addText(headerText, subText);
+	game.addBackground(backgroundTexture);
 
 
 	/* Event variable */
@@ -91,7 +102,7 @@ int main(int argc, char* args[])
 							/* On 'enter' click, end the start screen, start the game */
 						case SDLK_RETURN:
 							startScreen = false;
-							game.start(352, 256);
+							game.start(352 + mapX, 256 + mapY);
 							break;
 							/* On 'escape' click, exit the game */
 						case SDLK_ESCAPE:
@@ -113,7 +124,7 @@ int main(int argc, char* args[])
 		}
 
 		/* If the game has ended */
-		if (gameOver) {
+		else if (gameOver) {
 			/* Set the right text */
 			headerText.loadFromText("GAME OVER!", headerFont, { 200, 0, 0 });
 			subText.loadFromText("Click Enter to play again!", subFont, { 9, 75, 97 });
@@ -136,7 +147,7 @@ int main(int argc, char* args[])
 							break;
 							/* On 'escape' click, exit the game */
 						case SDLK_ESCAPE:
-							startScreen = false;
+							gameOver = false;
 							quit = true;
 						}
 					}
@@ -150,28 +161,27 @@ int main(int argc, char* args[])
 				SDL_RenderPresent(renderer);
 			}
 		}
-
-		/* Poll all events */
-		while (SDL_PollEvent(&event)) {
-			/* If user closed the application set the close flag to true */
-			if (event.type == SDL_QUIT)
-				quit = true;
-			/* Handle game events */
-			game.handleEvents(event);
-		}
-
 		
-		/* Process game logic */
-		game.process();
+		else {
+			/* Poll all events */
+			while (SDL_PollEvent(&event)) {
+				/* If user closed the application set the close flag to true */
+				if (event.type == SDL_QUIT)
+					quit = true;
+				/* Handle game events */
+				game.handleEvents(event);
+			}
 
-		/* Render background */
-		backgroundTexture.render(0, 0);
 
-		/* Render game */
-		game.render();
+			/* Process game logic */
+			game.process();
 
-		SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		SDL_RenderPresent(renderer);
+			/* Render game */
+			game.render();
+
+			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderPresent(renderer);
+		}
 	}
 
 	/* Cleanup */
