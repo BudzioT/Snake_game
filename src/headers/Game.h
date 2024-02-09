@@ -14,7 +14,7 @@ const int WINDOW_HEIGHT = 480;
 class Game
 {
 public:
-	Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClips[3],
+	Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClips[3], bool& end,
 		int blockWidth = 0, int blockHeight = 0,
 		int mapHeight = 0, int mapWidth = 0, int mapX = 0, int mapY = 0, int snakeX = 0, int snakeY = 0);
 	~Game();
@@ -32,7 +32,7 @@ public:
 	void addText(Texture& header, Texture& sub);
 
 	/* Start the game */
-	void start();
+	void start(int posX, int posY);
 
 	/* Start screen */
 	void startScreen();
@@ -65,6 +65,9 @@ private:
 	/* Food which makes snake grow */
 	Food m_food;
 
+	/* Snake start position */
+	std::pair<int, int> m_startPos;
+
 	/* Eating sound */
 	Mix_Chunk* m_soundEating;
 	/* Wall hit sound */
@@ -72,7 +75,9 @@ private:
 	/* Body hit sound */
 	Mix_Chunk* m_soundHitBody;
 
+	/* Header text */
 	Texture* m_headerText;
+	/* Sub text */
 	Texture* m_subText;
 
 	/* Current snake direction */
@@ -82,6 +87,9 @@ private:
 
 	/* Snake speed, one block every given number of miliseconds */
 	Uint32 m_speed;
+
+	/* End flag */
+	bool& m_end;
 
 	/* Seed source for randomness */
 	std::random_device m_device;

@@ -213,6 +213,27 @@ int Snake::getPosY() const
 	return m_body[0].getPosY();
 }
 
+void Snake::restart(int posX, int posY, double angle)
+{
+	/* Change the body size to 0 */
+	m_body.clear();
+
+	/* Create and initialize head */
+	m_body.emplace_back(posX, posY, angle);
+	m_body[0].setHead(true);
+	m_body[0].setTexture(m_texture);
+
+	/* Get segment width */
+	int width = m_body[0].getWidth();
+
+	/* Create tail */
+	m_body.emplace_back(posX - width, posY, angle);
+	m_body[1].setTail(true);
+
+	/* Revive the snake */
+	m_dead = false;
+}
+
 bool Snake::elementCollisionBody(int posX, int posY) const
 {
 	for (int i = 0; i < m_body.size(); i++) {

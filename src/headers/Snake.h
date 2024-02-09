@@ -41,6 +41,9 @@ public:
 	/* Get head Y axis position */
 	int getPosY() const;
 
+	/* Restart snake length, and set it to the given position */
+	void restart(int posX, int posY, double angle);
+
 	/* Change map position and dimensions */
 	void setMap(SDL_Rect newMap);
 	/* Change map dimensions */

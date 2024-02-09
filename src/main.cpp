@@ -50,54 +50,105 @@ int main(int argc, char* args[])
 		{ 64, 0, 32, 32 }
 	};
 
+	/* Close flag */
+	bool quit = false;
+	/* Start screen flag */
+	bool startScreen = true;
+	/* Game over flag */
+	bool gameOver = false;
+
 	/* Create the game */
-	Game game(&snakeTexture, &foodTexture, snakeClips, 32, 32, 640, 480, 0, 0, 352, 256);
+	Game game(&snakeTexture, &foodTexture, snakeClips, gameOver, 32, 32, 640, 480, 0, 0, 352, 256);
 
 
 	/* Initialize the rest of the game */
 	game.addSounds(*eatSound, *hitWall, *hitBody);
 	game.addText(headerText, subText);
 
-	game.start();
 
-
-	/* Close flag */
-	bool quit = false;
-	bool startScreen = true;
 	/* Event variable */
 	SDL_Event event;
 
 	/* Game loop */
 	while (!quit) {
-		/* Start screen rendering */
-		while (startScreen) {
-			/* Poll events */
-			while (SDL_PollEvent(&event)) {
-				if (event.type == SDL_QUIT) {
-					startScreen = false;
-					quit = true;
-				}
+		/* If the game is starting */
+		if (startScreen) {
+			/* Set the right text */
+			headerText.loadFromText("Welcome to the Snake Game!", headerFont, { 200, 0, 0 });
+			subText.loadFromText("Click Enter to start!", subFont, { 9, 75, 97 });
 
-				if (event.type == SDL_KEYDOWN) {
-					switch (event.key.keysym.sym) {
-					case SDLK_RETURN:
-						startScreen = false;
-						break;
-					case SDLK_ESCAPE:
+			/* Starter screen loop */
+			while (startScreen) {
+				/* Poll events */
+				while (SDL_PollEvent(&event)) {
+					if (event.type == SDL_QUIT) {
 						startScreen = false;
 						quit = true;
-						break;
 					}
 
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							/* On 'enter' click, end the start screen, start the game */
+						case SDLK_RETURN:
+							startScreen = false;
+							game.start(352, 256);
+							break;
+							/* On 'escape' click, exit the game */
+						case SDLK_ESCAPE:
+							startScreen = false;
+							quit = true;
+							break;
+						}
+
+					}
 				}
+
+				/* Render start screen */
+				game.startScreen();
+
+				/* Clear renderer */
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderPresent(renderer);
 			}
+		}
 
-			/* Render start screen */
-			game.startScreen();
+		/* If the game has ended */
+		if (gameOver) {
+			/* Set the right text */
+			headerText.loadFromText("GAME OVER!", headerFont, { 200, 0, 0 });
+			subText.loadFromText("Click Enter to play again!", subFont, { 9, 75, 97 });
 
-			/* Clear renderer */
-			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-			SDL_RenderPresent(renderer);
+			/* Game over screen loop */
+			while (gameOver) {
+				/* Poll events */
+				while (SDL_PollEvent(&event)) {
+					if (event.type == SDL_QUIT) {
+						gameOver = false;
+						quit = true;
+					}
+
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							/* On 'enter' click, go to the start screen */
+						case SDLK_RETURN:
+							gameOver = false;
+							startScreen = true;
+							break;
+							/* On 'escape' click, exit the game */
+						case SDLK_ESCAPE:
+							startScreen = false;
+							quit = true;
+						}
+					}
+				}
+
+				/* Render the GameOver screen */
+				game.gameOver();
+
+				/* Clear renderer */
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderPresent(renderer);
+			}
 		}
 
 		/* Poll all events */

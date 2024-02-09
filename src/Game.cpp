@@ -1,14 +1,14 @@
 #include "headers/Game.h"
 
-Game::Game(Texture* snakeTexture, Texture* foodTexture,
-	const SDL_Rect snakeClips[3], int blockWidth, int blockHeight, int mapWidth, int mapHeight,
+Game::Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClips[3], bool& end, 
+	int blockWidth, int blockHeight, int mapWidth, int mapHeight,
 	int mapX, int mapY, int snakeX, int snakeY)
 	: m_snake(snakeTexture, snakeClips[0], snakeClips[1], snakeClips[2], blockWidth, blockHeight, 
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
 		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
 		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr),
-		m_headerText(nullptr), m_subText(nullptr)
+		m_headerText(nullptr), m_subText(nullptr), m_end(end), m_startPos(snakeX, snakeY)
 {
 	/* Set map dimensions */
 	m_snake.setMap({ mapX, mapY, mapWidth, mapHeight });
@@ -36,8 +36,17 @@ void Game::render()
 	m_snake.render();
 }
 
-void Game::start()
+void Game::start(int posX, int posY)
 {
+	/* Set the end flag to false */
+	m_end = false;
+
+	/* Make Snake stay in place */
+	m_currentDirection = Snake_direction::STAY;
+
+	/* Set the snake start position */
+	m_snake.restart(posX, posY, 180.0);
+
 	/* Make the snake move in the given direction */
 	m_timerID = SDL_AddTimer(m_speed, &Game::snakeMove_callback, this);
 }
@@ -148,7 +157,7 @@ Uint32 Game::snakeMove(Uint32 interval)
 		/* If the reason is hitting a body, play the body hit sound effect */
 		else
 			Mix_PlayChannel(-1, m_soundHitBody, 0);
-		/* Show the gameover screen */
+		/* End the game */
 		end();
 	}
 
@@ -158,7 +167,14 @@ Uint32 Game::snakeMove(Uint32 interval)
 
 void Game::gameOver()
 {
-	
+	SDL_RenderClear(renderer);
+
+	/* Render header text */
+	m_headerText->render(((WINDOW_WIDTH / 2) - (m_headerText->width() / 2)),
+		((WINDOW_HEIGHT / 4) - (m_headerText->height() / 2)));
+	/* Render sub text */
+	m_subText->render(((WINDOW_WIDTH / 2) - (m_subText->width() / 2)),
+		((WINDOW_HEIGHT / 1.5) - (m_subText->height() / 2)));
 }
 
 Uint32 Game::snakeMove_callback(Uint32 interval, void* param)
@@ -169,6 +185,9 @@ Uint32 Game::snakeMove_callback(Uint32 interval, void* param)
 
 void Game::end()
 {
+	/* Set the end flag to true */
+	m_end = true;
+
 	/* Removes the game timer */
 	SDL_RemoveTimer(m_timerID);
 }
