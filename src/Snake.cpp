@@ -123,7 +123,10 @@ void Snake::grow()
 
 	/* Get the tail's angle */
 	int angle = static_cast<int>(tail->getAngle());
+
+	/* !! This made the tail flicker, it isn't needed if i'm correct !! */
 	/* Move the tail back based of angle (tail's direction) */
+	/*
 	switch (angle) {
 	case 0:
 		tail->posX() += tail->getWidth();
@@ -138,6 +141,7 @@ void Snake::grow()
 		tail->posY() += tail->getHeight();
 		break;
 	}
+	*/
 }
 
 void Snake::setMap(SDL_Rect newMap)
