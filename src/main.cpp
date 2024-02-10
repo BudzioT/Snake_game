@@ -30,9 +30,10 @@ int main(int argc, char* args[])
 
 
 	/* Textures */
-	Texture backgroundTexture;
+	Texture gameBackgroundTexture;
 	Texture snakeTexture;
 	Texture foodTexture;
+	Texture windowBackgroundTexture;
 
 	/* Sound effects */
 	Mix_Chunk* eatSound = nullptr;
@@ -45,12 +46,12 @@ int main(int argc, char* args[])
 
 	/* Map start points */
 	int mapX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
-	int mapY = (WINDOW_HEIGHT - GAME_HEIGHT) / 2;
+	int mapY = (WINDOW_HEIGHT - GAME_HEIGHT) / 2 + 30;
 
 
 	/* Load media */
-	loadMedia(backgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText, 
-		subText);
+	loadMedia(gameBackgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText,
+		subText, windowBackgroundTexture);
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {
@@ -74,7 +75,7 @@ int main(int argc, char* args[])
 	/* Initialize the rest of the game */
 	game.addSounds(*eatSound, *hitWall, *hitBody);
 	game.addText(headerText, subText);
-	game.addBackground(backgroundTexture);
+	game.addBackground(gameBackgroundTexture);
 
 
 	/* Event variable */
@@ -175,6 +176,9 @@ int main(int argc, char* args[])
 
 			/* Process game logic */
 			game.process();
+
+			/* Render window background */
+			windowBackgroundTexture.render(0, 0);
 
 			/* Render game */
 			game.render();

@@ -52,7 +52,8 @@ bool initialize()
 }
 
 bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound,
-	Mix_Chunk** hitWall, Mix_Chunk** hitBody, Texture& headerText, Texture& subText)
+	Mix_Chunk** hitWall, Mix_Chunk** hitBody, Texture& headerText, Texture& subText, 
+	Texture& windowBackground)
 {
 	/* Success flag */
 	bool success = true;
@@ -74,6 +75,12 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 	/* Load the food texture, set color key to green */
 	if (!foodTexture.loadFromFile(IMAGE_DIR "food.png", &green)) {
 		printf("Couldn't load the food texture!\n");
+		success = false;
+	}
+
+	/* Load window background texture */
+	if (!windowBackground.loadFromFile(IMAGE_DIR "window_background.png")) {
+		printf("Couldn't load the window background texture!\n");
 		success = false;
 	}
 
