@@ -92,7 +92,7 @@ int main(int argc, char* args[])
 		/* If the game is starting */
 		if (startScreen) {
 			/* Set the right text */
-			headerText.loadFromText("Welcome to the Snake Game!", headerFont, { 200, 0, 0 });
+			headerText.loadFromText("Welcome to the Snake Game!", headerFont, { 240, 20, 20 });
 			subText.loadFromText("Click Enter to start!", subFont, { 9, 75, 97 });
 
 			/* Starter screen loop */
@@ -120,6 +120,9 @@ int main(int argc, char* args[])
 
 					}
 				}
+
+				/* Render start screen background */
+				startScreenTexture.render(0, 0);
 
 				/* Render start screen */
 				game.startScreen();
@@ -160,7 +163,10 @@ int main(int argc, char* args[])
 					}
 				}
 
-				/* Render the GameOver screen */
+				/* Render Game Over screen background */
+				gameOverScreenTexture.render(0, 0);
+
+				/* Render the Game Over screen */
 				game.gameOver();
 
 				/* Clear renderer */

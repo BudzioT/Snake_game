@@ -7,8 +7,8 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClip
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
 		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
-		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr), m_gameOverScreen(nullptr),
-		m_headerText(nullptr), m_subText(nullptr), m_background(nullptr), m_startScreen(nullptr),
+		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr),
+		m_headerText(nullptr), m_subText(nullptr), m_background(nullptr),
 		m_end(end), m_startPos(snakeX, snakeY), m_map{ mapX, mapY, mapWidth, mapHeight }
 {
 	/* Set map dimensions */
@@ -58,8 +58,6 @@ void Game::start(int posX, int posY)
 
 void Game::startScreen()
 {
-	SDL_RenderClear(renderer);
-
 	/* Render header text */
 	m_headerText->render(((GAME_WIDTH / 2) - (m_headerText->width() / 2) + m_map.x),
 		((GAME_HEIGHT / 4) - (m_headerText->height() / 2) + m_map.y));
@@ -177,8 +175,6 @@ Uint32 Game::snakeMove(Uint32 interval)
 
 void Game::gameOver()
 {
-	SDL_RenderClear(renderer);
-
 	/* Render header text */
 	m_headerText->render(((GAME_WIDTH / 2) - (m_headerText->width() / 2) + m_map.x),
 		((GAME_HEIGHT / 4) - (m_headerText->height() / 2) + m_map.y));
