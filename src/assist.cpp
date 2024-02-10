@@ -53,7 +53,7 @@ bool initialize()
 
 bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture, Mix_Chunk** eatSound,
 	Mix_Chunk** hitWall, Mix_Chunk** hitBody, Texture& headerText, Texture& subText, 
-	Texture& windowBackground)
+	Texture& windowBackground, Texture& startScreen, Texture& gameOverScreen)
 {
 	/* Success flag */
 	bool success = true;
@@ -81,6 +81,18 @@ bool loadMedia(Texture& background, Texture& snakeTexture, Texture& foodTexture,
 	/* Load window background texture */
 	if (!windowBackground.loadFromFile(IMAGE_DIR "window_background.png")) {
 		printf("Couldn't load the window background texture!\n");
+		success = false;
+	}
+
+	/* Load start screen texture */
+	if (!startScreen.loadFromFile(IMAGE_DIR "title-screen.png")) {
+		printf("Couldn't load the title screen texture!\n");
+		success = false;
+	}
+
+	/* Load game over screen texture */
+	if (!gameOverScreen.loadFromFile(IMAGE_DIR "gameOver.png")) {
+		printf("Couldn't load the game over screen texture!\n");
 		success = false;
 	}
 

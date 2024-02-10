@@ -29,11 +29,14 @@ int main(int argc, char* args[])
 	}
 
 
-	/* Textures */
+	/* Game Textures */
 	Texture gameBackgroundTexture;
 	Texture snakeTexture;
 	Texture foodTexture;
+	/* State dependent textures */
 	Texture windowBackgroundTexture;
+	Texture startScreenTexture;
+	Texture gameOverScreenTexture;
 
 	/* Sound effects */
 	Mix_Chunk* eatSound = nullptr;
@@ -48,10 +51,20 @@ int main(int argc, char* args[])
 	int mapX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
 	int mapY = (WINDOW_HEIGHT - GAME_HEIGHT) / 2 + 30;
 
+	/* Close flag */
+	bool quit = false;
+	/* Start screen flag */
+	bool startScreen = true;
+	/* Game over flag */
+	bool gameOver = false;
 
 	/* Load media */
-	loadMedia(gameBackgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, headerText,
-		subText, windowBackgroundTexture);
+	if (!loadMedia(gameBackgroundTexture, snakeTexture, foodTexture, &eatSound, &hitWall, &hitBody, 
+		headerText, subText, windowBackgroundTexture, startScreenTexture, gameOverScreenTexture)) {
+		printf("Couldn't load the needed media!\n");
+		quit = true;
+	}
+	
 
 	/* Snake clips */
 	SDL_Rect snakeClips[3] = {
@@ -59,13 +72,6 @@ int main(int argc, char* args[])
 		{ 32, 0, 32, 32 },
 		{ 64, 0, 32, 32 }
 	};
-
-	/* Close flag */
-	bool quit = false;
-	/* Start screen flag */
-	bool startScreen = true;
-	/* Game over flag */
-	bool gameOver = false;
 
 	/* Create the game */
 	Game game(&snakeTexture, &foodTexture, snakeClips, gameOver, 32, 32, 640, 480, mapX, mapY, 
