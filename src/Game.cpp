@@ -108,24 +108,28 @@ void Game::handleEvents(const SDL_Event& event)
 		switch (event.key.keysym.sym) {
 			/* Go up, if snake isn't going down */
 		case SDLK_UP:
+		case SDLK_w:
 			if (m_currentDirection != Snake_direction::DOWN)
 				m_currentDirection = Snake_direction::UP;
 			break;
 
 			/* Go down, if snake isn't going up */
 		case SDLK_DOWN:
+		case SDLK_s:
 			if (m_currentDirection != Snake_direction::UP)
 				m_currentDirection = Snake_direction::DOWN;
 			break;
 
 			/* Go left, if snake isn't going right */
 		case SDLK_LEFT:
+		case SDLK_a:
 			if (m_currentDirection != Snake_direction::RIGHT)
 				m_currentDirection = Snake_direction::LEFT;
 			break;
 
 			/* Go right, if snake isn't going left */
 		case SDLK_RIGHT:
+		case SDLK_d:
 			if (m_currentDirection != Snake_direction::LEFT)
 				m_currentDirection = Snake_direction::RIGHT;
 			break;
