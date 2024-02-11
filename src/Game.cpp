@@ -5,10 +5,10 @@ Game::Game(Texture* snakeTexture, Texture* foodTexture, const SDL_Rect snakeClip
 	int mapX, int mapY, int snakeX, int snakeY)
 	: m_snake(snakeTexture, snakeClips[0], snakeClips[1], snakeClips[2], blockWidth, blockHeight, 
 		snakeX, snakeY, 180.0), m_food(foodTexture, 0, 0, blockWidth, blockHeight),
-		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150),
+		m_currentDirection(Snake_direction::STAY), m_timerID(0), m_speed(150), m_scoreText(),
 		m_gen(m_device()), m_randX(0, mapWidth / blockWidth - 1), m_randY(0, mapHeight / blockHeight - 1),
-		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr),
-		m_headerText(nullptr), m_subText(nullptr), m_background(nullptr),
+		m_soundEating(nullptr), m_soundHitWall(nullptr), m_soundHitBody(nullptr), m_scoreFont(nullptr),
+		m_headerText(nullptr), m_subText(nullptr), m_background(nullptr), m_score(0),
 		m_end(end), m_startPos(snakeX, snakeY), m_map{ mapX, mapY, mapWidth, mapHeight }
 {
 	/* Set map dimensions */
@@ -39,12 +39,20 @@ void Game::render()
 	m_food.render();
 	/* Render snake above the food */
 	m_snake.render();
+
+	/* Render score text, if it exists */
+	if (m_scoreFont) {
+		m_scoreText.render(400 - m_scoreText.width() / 2, 30 - m_scoreText.height() / 2);
+	}
 }
 
 void Game::start(int posX, int posY)
 {
 	/* Set the end flag to false */
 	m_end = false;
+
+	/* Reset score */
+	m_score = 0;
 
 	/* Make Snake stay in place */
 	m_currentDirection = Snake_direction::STAY;
@@ -54,6 +62,10 @@ void Game::start(int posX, int posY)
 
 	/* Make the snake move in the given direction */
 	m_timerID = SDL_AddTimer(m_speed, &Game::snakeMove_callback, this);
+
+	/* Initialize score text, if it exists */
+	if (m_scoreFont)
+		m_scoreText.loadFromText("Score: 0", m_scoreFont, { 0xFF, 0xFF, 0xFF });
 }
 
 void Game::startScreen()
@@ -73,10 +85,14 @@ void Game::addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody)
 	m_soundHitBody = &hitBody;
 }
 
-void Game::addText(Texture& header, Texture& sub)
+void Game::addText(Texture& header, Texture& sub, TTF_Font& scoreFont)
 {
 	m_headerText = &header;
 	m_subText = &sub;
+	m_scoreFont = &scoreFont;
+
+	/* Initialize score text */
+	m_scoreText.loadFromText("Score: 0", m_scoreFont, { 0xFF, 0xFF, 0xFF });
 }
 
 void Game::addBackground(Texture& background)
@@ -143,6 +159,13 @@ void Game::process()
 		
 		/* Grow the snake */
 		m_snake.grow();
+
+		/* Make the score higher, update the text */
+		++m_score;
+		if (m_scoreFont) {
+			std::string score = "Score: " + std::to_string(m_score);
+			m_scoreText.loadFromText(score.c_str(), m_scoreFont, { 0xFF, 0xFF, 0xFF });
+		}
 	}
 }
 
@@ -181,6 +204,12 @@ void Game::gameOver()
 	/* Render sub text */
 	m_subText->render(((GAME_WIDTH / 2) - (m_subText->width() / 2) + m_map.x),
 		((GAME_HEIGHT / 1.5) - (m_subText->height() / 2) + m_map.y));
+
+	/* Render final score, if it exists */
+	if (m_scoreFont) {
+		m_scoreText.render((GAME_WIDTH / 2) - (m_scoreText.width() / 2) + m_map.x,
+			(GAME_HEIGHT / 2.25) - (m_scoreText.height() / 2) + m_map.y);
+	}
 }
 
 Uint32 Game::snakeMove_callback(Uint32 interval, void* param)

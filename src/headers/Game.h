@@ -24,12 +24,11 @@ public:
 
 	/* Add sounds 
 	Sound effects: eating, hitting wall, hitting body
-	Music: theme
 	*/
 	void addSounds(Mix_Chunk& eating, Mix_Chunk& hitWall, Mix_Chunk& hitBody);
 
 	/* Add start and end text */
-	void addText(Texture& header, Texture& sub);
+	void addText(Texture& header, Texture& sub, TTF_Font& scoreFont);
 
 	/* Add static background */
 	void addBackground(Texture& background);
@@ -85,6 +84,10 @@ private:
 	Texture* m_headerText;
 	/* Sub text */
 	Texture* m_subText;
+	/* Score text */
+	Texture m_scoreText;
+	/* Score text */
+	TTF_Font* m_scoreFont;
 
 	/* Background texture */
 	Texture* m_background;
@@ -99,6 +102,9 @@ private:
 
 	/* End flag */
 	bool& m_end;
+
+	/* Score */
+	int m_score;
 
 	/* Seed source for randomness */
 	std::random_device m_device;

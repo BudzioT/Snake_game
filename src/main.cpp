@@ -80,7 +80,7 @@ int main(int argc, char* args[])
 
 	/* Initialize the rest of the game */
 	game.addSounds(*eatSound, *hitWall, *hitBody);
-	game.addText(headerText, subText);
+	game.addText(headerText, subText, *subFont);
 	game.addBackground(gameBackgroundTexture);
 
 
